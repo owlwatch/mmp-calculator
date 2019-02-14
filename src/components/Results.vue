@@ -1,5 +1,6 @@
 <template lang="pug">
 .mmp-calculator__results
+	h2 Available Products
 	ul.mmp-calculator__results-products
 		li(v-for="product in recommendedProducts")
 			h4 {{ product.name }}
@@ -55,11 +56,10 @@ module.exports = {
 	computed : {
 		recommendedProducts : function(){
 
-			this.products.filter( product => {
+			return this.products.filter( product => {
 
 				// decide if this should be included in the list
-				console.log( product.firstTimeBuyer, this.values.isFirstTimeBuyer );
-				if( product.firstTimeBuyer !== this.values.isFirstTimeBuyer ){
+				if( product.firstTimeBuyer === 'Y' && this.values.isFirstTimeBuyer === 'N'){
 					return false;
 				}
 				return true;
@@ -68,7 +68,6 @@ module.exports = {
 
 				return product;
 			});
-			return this.products;
 		},
 
 		monthlyPayment: function(){
@@ -103,6 +102,12 @@ module.exports = {
 
 	&__results {
 		text-align: left;
+
+		h2 {
+			width: auto;
+			padding-left: 0;
+			text-align: center;
+		}
 
 		ul {
 			text-align: left;

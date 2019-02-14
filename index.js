@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './components/App.vue';
+import App from './src/components/App.vue';
 
 function init(){
 	let nodes = document.querySelectorAll('[data-component="mmp-mortgage-calculator"]');

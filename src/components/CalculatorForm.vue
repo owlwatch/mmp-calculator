@@ -55,28 +55,6 @@ form.mmp-calculator__form
 
 	.mmp-calculator__form-group
 		.mmp-calculator__form-label
-			span Do you have a real estate agent?
-			.input-wrap.-radios.-fit
-				label
-					input(type="radio",name="hasRealEstateAgent",value="0",v-model="values.hasRealEstateAgent")
-					span No
-				label
-					input(type="radio",name="hasRealEstateAgent",value="1",v-model="values.hasRealEstateAgent")
-					span Yes
-
-	.mmp-calculator__form-group
-		.mmp-calculator__form-label
-			span Are you a veteran?
-			.input-wrap.-radios.-fit
-				label
-					input(type="radio",name="isVeteran",value="0",v-model="values.isVeteran")
-					span No
-				label
-					input(type="radio",name="isVeteran",value="1",v-model="values.isVeteran")
-					span Yes
-
-	.mmp-calculator__form-group
-		.mmp-calculator__form-label
 			span Is this home going to be your primary residence?
 			.input-wrap.-radios.-fit
 				label

@@ -8742,29 +8742,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],"components/CalculatorForm.vue":[function(require,module,exports) {
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+},{}],"src/components/CalculatorForm.vue":[function(require,module,exports) {
 //
 //
 //
@@ -8867,14 +8845,14 @@ module.exports = {
     }
   }
 };
-        var $99dade = exports.default || module.exports;
+        var $53ab5d = exports.default || module.exports;
       
-      if (typeof $99dade === 'function') {
-        $99dade = $99dade.options;
+      if (typeof $53ab5d === 'function') {
+        $53ab5d = $53ab5d.options;
       }
     
         /* template */
-        Object.assign($99dade, (function () {
+        Object.assign($53ab5d, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -9133,106 +9111,6 @@ module.exports = {
     _vm._v(" "),
     _c("div", { staticClass: "mmp-calculator__form-group" }, [
       _c("div", { staticClass: "mmp-calculator__form-label" }, [
-        _c("span", [_vm._v("Do you have a real estate agent?")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap -radios -fit" }, [
-          _c("label", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.values.hasRealEstateAgent,
-                  expression: "values.hasRealEstateAgent"
-                }
-              ],
-              attrs: { type: "radio", name: "hasRealEstateAgent", value: "0" },
-              domProps: { checked: _vm._q(_vm.values.hasRealEstateAgent, "0") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.values, "hasRealEstateAgent", "0")
-                }
-              }
-            }),
-            _c("span", [_vm._v("No")])
-          ]),
-          _vm._v(" "),
-          _c("label", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.values.hasRealEstateAgent,
-                  expression: "values.hasRealEstateAgent"
-                }
-              ],
-              attrs: { type: "radio", name: "hasRealEstateAgent", value: "1" },
-              domProps: { checked: _vm._q(_vm.values.hasRealEstateAgent, "1") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.values, "hasRealEstateAgent", "1")
-                }
-              }
-            }),
-            _c("span", [_vm._v("Yes")])
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "mmp-calculator__form-group" }, [
-      _c("div", { staticClass: "mmp-calculator__form-label" }, [
-        _c("span", [_vm._v("Are you a veteran?")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-wrap -radios -fit" }, [
-          _c("label", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.values.isVeteran,
-                  expression: "values.isVeteran"
-                }
-              ],
-              attrs: { type: "radio", name: "isVeteran", value: "0" },
-              domProps: { checked: _vm._q(_vm.values.isVeteran, "0") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.values, "isVeteran", "0")
-                }
-              }
-            }),
-            _c("span", [_vm._v("No")])
-          ]),
-          _vm._v(" "),
-          _c("label", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.values.isVeteran,
-                  expression: "values.isVeteran"
-                }
-              ],
-              attrs: { type: "radio", name: "isVeteran", value: "1" },
-              domProps: { checked: _vm._q(_vm.values.isVeteran, "1") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.values, "isVeteran", "1")
-                }
-              }
-            }),
-            _c("span", [_vm._v("Yes")])
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "mmp-calculator__form-group" }, [
-      _c("div", { staticClass: "mmp-calculator__form-label" }, [
         _c("span", [
           _vm._v("Is this home going to be your primary residence?")
         ]),
@@ -9291,7 +9169,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: "data-v-99dade",
+            _scopeId: "data-v-53ab5d",
             functional: undefined
           };
         })());
@@ -9304,9 +9182,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$99dade', $99dade);
+            api.createRecord('$53ab5d', $53ab5d);
           } else {
-            api.reload('$99dade', $99dade);
+            api.reload('$53ab5d', $53ab5d);
           }
         }
 
@@ -10963,13 +10841,14 @@ module.exports.default = axios;
 
 },{"./utils":"node_modules/axios/lib/utils.js","./helpers/bind":"node_modules/axios/lib/helpers/bind.js","./core/Axios":"node_modules/axios/lib/core/Axios.js","./defaults":"node_modules/axios/lib/defaults.js","./cancel/Cancel":"node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"node_modules/axios/lib/helpers/spread.js"}],"node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"components/Results.vue":[function(require,module,exports) {
+},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/components/Results.vue":[function(require,module,exports) {
 "use strict";
 
 var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
 //
 //
 //
@@ -11015,11 +10894,9 @@ module.exports = {
     recommendedProducts: function recommendedProducts() {
       var _this = this;
 
-      this.products.filter(function (product) {
+      return this.products.filter(function (product) {
         // decide if this should be included in the list
-        console.log(product.firstTimeBuyer, _this.values.isFirstTimeBuyer);
-
-        if (product.firstTimeBuyer !== _this.values.isFirstTimeBuyer) {
+        if (product.firstTimeBuyer === 'Y' && _this.values.isFirstTimeBuyer === 'N') {
           return false;
         }
 
@@ -11027,7 +10904,6 @@ module.exports = {
       }).map(function (product) {
         return product;
       });
-      return this.products;
     },
     monthlyPayment: function monthlyPayment() {
       if (!this.values.householdIncome) {
@@ -11054,19 +10930,21 @@ module.exports = {
     }
   }
 };
-        var $81ce3e = exports.default || module.exports;
+        var $ed1494 = exports.default || module.exports;
       
-      if (typeof $81ce3e === 'function') {
-        $81ce3e = $81ce3e.options;
+      if (typeof $ed1494 === 'function') {
+        $ed1494 = $ed1494.options;
       }
     
         /* template */
-        Object.assign($81ce3e, (function () {
+        Object.assign($ed1494, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mmp-calculator__results" }, [
+    _c("h2", [_vm._v("Available Products")]),
+    _vm._v(" "),
     _c(
       "ul",
       { staticClass: "mmp-calculator__results-products" },
@@ -11127,7 +11005,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: "data-v-81ce3e",
+            _scopeId: "data-v-ed1494",
             functional: undefined
           };
         })());
@@ -11140,9 +11018,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$81ce3e', $81ce3e);
+            api.createRecord('$ed1494', $ed1494);
           } else {
-            api.reload('$81ce3e', $81ce3e);
+            api.reload('$ed1494', $ed1494);
           }
         }
 
@@ -11153,7 +11031,7 @@ render._withStripped = true
       
       }
     })();
-},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"models/Product.js":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/models/Product.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11188,7 +11066,7 @@ function () {
 }();
 
 exports.default = Product;
-},{}],"models/CountyLimit.js":[function(require,module,exports) {
+},{}],"src/models/CountyLimit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11264,7 +11142,7 @@ function () {
 }();
 
 exports.default = CountyLimit;
-},{}],"components/App.vue":[function(require,module,exports) {
+},{}],"src/components/App.vue":[function(require,module,exports) {
 "use strict";
 
 var _CalculatorForm = _interopRequireDefault(require("./CalculatorForm.vue"));
@@ -11410,14 +11288,14 @@ module.exports = {
     }
   }
 };
-        var $6a0f28 = exports.default || module.exports;
+        var $57db39 = exports.default || module.exports;
       
-      if (typeof $6a0f28 === 'function') {
-        $6a0f28 = $6a0f28.options;
+      if (typeof $57db39 === 'function') {
+        $57db39 = $57db39.options;
       }
     
         /* template */
-        Object.assign($6a0f28, (function () {
+        Object.assign($57db39, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -11457,7 +11335,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: "data-v-6a0f28",
+            _scopeId: "data-v-57db39",
             functional: undefined
           };
         })());
@@ -11470,9 +11348,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$6a0f28', $6a0f28);
+            api.createRecord('$57db39', $57db39);
           } else {
-            api.reload('$6a0f28', $6a0f28);
+            api.reload('$57db39', $57db39);
           }
         }
 
@@ -11483,12 +11361,12 @@ render._withStripped = true
       
       }
     })();
-},{"./CalculatorForm.vue":"components/CalculatorForm.vue","./Results.vue":"components/Results.vue","../models/Product":"models/Product.js","../models/CountyLimit":"models/CountyLimit.js","axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"index.js":[function(require,module,exports) {
+},{"./CalculatorForm.vue":"src/components/CalculatorForm.vue","./Results.vue":"src/components/Results.vue","../models/Product":"src/models/Product.js","../models/CountyLimit":"src/models/CountyLimit.js","axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _vue = _interopRequireDefault(require("vue"));
 
-var _App = _interopRequireDefault(require("./components/App.vue"));
+var _App = _interopRequireDefault(require("./src/components/App.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11514,7 +11392,7 @@ function init() {
 }
 
 init();
-},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","./components/App.vue":"components/App.vue"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","./src/components/App.vue":"src/components/App.vue"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -11541,7 +11419,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52696" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58377" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
