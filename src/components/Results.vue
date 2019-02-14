@@ -107,6 +107,7 @@ module.exports = {
 			width: auto;
 			padding-left: 0;
 			text-align: center;
+			margin-bottom: 1em;
 		}
 
 		ul {

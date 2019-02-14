@@ -94,6 +94,7 @@
   width: auto;
   padding-left: 0;
   text-align: center;
+  margin-bottom: 1em;
 }
 .mmp-calculator__results ul[data-v-ed1494] {
   text-align: left;
