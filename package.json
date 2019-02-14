@@ -1,0 +1,26 @@
+{
+  "name": "mortgage-calculator",
+  "version": "1.0.0",
+  "description": "Maryland Mortgage Program Calculator",
+  "main": "index.js",
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^2.5.2",
+    "parcel-bundler": "^1.11.0",
+    "pug": "^2.0.3",
+    "sass": "^1.17.0",
+    "vue-template-compiler": "^2.6.3"
+  },
+  "scripts": {
+    "serve": "parcel serve index.html",
+    "build": "parcel build index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^9.4.7",
+    "axios": "^0.18.0",
+    "postcss-modules": "^1.4.1",
+    "vue": "^2.6.3",
+    "vue-hot-reload-api": "^2.3.1"
+  }
+}
