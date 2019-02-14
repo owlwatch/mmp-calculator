@@ -9,8 +9,7 @@ form.mmp-calculator__form
 				input.input-number(
 					type="text",
 					v-model="values.householdIncome"
-					@change="formatNumber",
-					@keyup="formatNumber"
+					@blur="formatNumber"
 				)
 	.mmp-calculator__form-group
 		label.mmp-calculator__form-label
@@ -31,6 +30,7 @@ form.mmp-calculator__form
 			span Location of purchase property
 			.input-wrap
 				select(v-model="values.location")
+					option(value="",disabled,hidden) Select County
 					option(v-for="county in counties") {{ county }}
 
 			.input-wrap.-radios.-fit
@@ -47,10 +47,10 @@ form.mmp-calculator__form
 			span Are you a first-time homebuyer?
 			.input-wrap.-radios.-fit
 				label
-					input(type="radio",name="isFirstTimeBuyer",value="0",v-model="values.isFirstTimeBuyer")
+					input(type="radio",name="isFirstTimeBuyer",value="N",v-model="values.isFirstTimeBuyer")
 					span No
 				label
-					input(type="radio",name="isFirstTimeBuyer",value="1",v-model="values.isFirstTimeBuyer")
+					input(type="radio",name="isFirstTimeBuyer",value="Y",v-model="values.isFirstTimeBuyer")
 					span Yes
 
 	.mmp-calculator__form-group
@@ -167,6 +167,7 @@ module.exports = {
 .input-wrap {
 	display: table;
 	border-radius: 4px;
+	width: 100%;
 
 	&.-fit {
 		width: auto;
@@ -193,14 +194,16 @@ module.exports = {
 	}
 	> input[type="text"],
 	> input[type="number"]{
-		padding: 12px;
+		padding: 8px 12px;
 		font-size: 1.1rem;
 		line-height: 1.5;
 		margin: 0;
 		display: block;
 	}
 	> select {
-		width: auto;
+		display: block;
+		border: 1px solid #ccc;
+
 	}
 	&.-radios {
 		margin-left: -10px;
@@ -221,15 +224,16 @@ module.exports = {
 
 .input-context {
 	width: 1em;
-	padding: 2px .8em;
+	padding: 1px .5em;
+	text-align: center;
 	background: #f6f6f6;
 	font-size: 1.1rem;
 	color: #888;
 }
 
 .input-number {
-	width: 8em;
-	text-align: right;
+	width: 7em;
+	text-align: left;
 }
 
 </style>

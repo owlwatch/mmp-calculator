@@ -1,7 +1,7 @@
 <template lang="pug">
 .mmp-calculator
 	.row-fluid
-		.col.span6
+		.col.span6.sticky
 			calculator-form(
 				ref="form",
 				v-bind:values="values"
@@ -44,7 +44,7 @@ module.exports = {
 				borrowerIncome: '60,000',
 				householdIncome: '100,000',
 				householdSize: "1",
-				isFirstTimeBuyer: 0,
+				isFirstTimeBuyer: 'N',
 				hasRealEstateAgent: 0,
 				isVeteran: 0,
 				targeted: 0,
@@ -88,6 +88,7 @@ module.exports = {
 						if( data.name && data.name !== '' && (!last || last.name !== data.name ) ){
 							last = new Product( data.name );
 							last.description = data.description;
+							last.firstTimeBuyer = data.firstTimeBuyer;
 							this.products.push( last );
 						}
 						if( last ){
@@ -157,6 +158,9 @@ module.exports = {
         width: auto !important;
         padding-left: 0 !important;
     }
-
+		.sticky {
+			position: sticky;
+			top: 10px;
+		}
 }
 </style>

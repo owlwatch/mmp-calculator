@@ -24,6 +24,7 @@
 .input-wrap[data-v-99dade] {
   display: table;
   border-radius: 4px;
+  width: 100%;
 }
 .input-wrap.-fit[data-v-99dade] {
   width: auto;
@@ -50,14 +51,15 @@
 }
 .input-wrap > input[type=text][data-v-99dade],
 .input-wrap > input[type=number][data-v-99dade] {
-  padding: 12px;
+  padding: 8px 12px;
   font-size: 1.1rem;
   line-height: 1.5;
   margin: 0;
   display: block;
 }
 .input-wrap > select[data-v-99dade] {
-  width: auto;
+  display: block;
+  border: 1px solid #ccc;
 }
 .input-wrap.-radios[data-v-99dade] {
   margin-left: -10px;
@@ -76,13 +78,71 @@
 }
 .input-context[data-v-99dade] {
   width: 1em;
-  padding: 2px 0.8em;
+  padding: 1px 0.5em;
+  text-align: center;
   background: #f6f6f6;
   font-size: 1.1rem;
   color: #888;
 }
 .input-number[data-v-99dade] {
-  width: 8em;
+  width: 7em;
+  text-align: left;
+}.mmp-calculator__results[data-v-81ce3e] {
+  text-align: left;
+}
+.mmp-calculator__results ul[data-v-81ce3e] {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+.mmp-calculator__results ul li[data-v-81ce3e] {
+  padding: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  border: 1px solid #ccc;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.mmp-calculator__results ul li h4[data-v-81ce3e] {
+  width: auto;
+  padding: 0 20px;
+  font-size: 18px;
+}
+.mmp-calculator__results ul li p[data-v-81ce3e] {
+  width: auto !important;
+  padding: 0 20px !important;
+  font-size: 13px;
+}
+.mmp-calculator__results ul li + li[data-v-81ce3e] {
+  margin-top: 20px;
+}
+.mmp-calculator__results-types[data-v-81ce3e] {
+  text-align: left;
+  font-size: 14px;
+  width: 100%;
+  border-collapse: collapse;
+}
+.mmp-calculator__results-types th[data-v-81ce3e] {
+  text-align: left;
+}
+.mmp-calculator__results-types thead[data-v-81ce3e] {
+  background: #f2f2f2;
+}
+.mmp-calculator__results-types tbody tr[data-v-81ce3e] {
+  border-bottom: 1px solid #f6f6f6;
+}
+.mmp-calculator__results-types tbody tr[data-v-81ce3e]:last-child {
+  border-bottom-width: 0;
+}
+.mmp-calculator__results-types tbody tr[data-v-81ce3e]:nth-child(even) {
+  background: #f8f8f8;
+}
+.mmp-calculator__results-types td[data-v-81ce3e], .mmp-calculator__results-types th[data-v-81ce3e] {
+  text-align: left;
+  padding: 2px 20px;
+}
+.mmp-calculator__results-types td.t-right[data-v-81ce3e], .mmp-calculator__results-types th.t-right[data-v-81ce3e] {
   text-align: right;
 }.mmp-calculator[data-v-6a0f28] {
   margin: 20px auto;
@@ -91,4 +151,9 @@
 .mmp-calculator p[data-v-6a0f28] {
   width: auto !important;
   padding-left: 0 !important;
+}
+.mmp-calculator .sticky[data-v-6a0f28] {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 10px;
 }

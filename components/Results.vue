@@ -1,10 +1,20 @@
 <template lang="pug">
 .mmp-calculator__results
-	ul
+	ul.mmp-calculator__results-products
 		li(v-for="product in recommendedProducts")
-			h4 {{ product.name }} ({{ product.type }})
-			.rate {{ product.interestRate }}
-			.loanAmount {{ product.loanAmount }}
+			h4 {{ product.name }}
+			p {{ product.description }}
+			table.mmp-calculator__results-types
+				thead
+					tr
+						th
+						th.t-right Interest rate
+						th.t-right Maximum Loan
+				tbody
+					tr(v-for="type in product.types")
+						td.type {{ type.type }}
+						td.rate.t-right {{ type.interestRate }}
+						td.loanAmount.t-right ${{ getLoanAmount( type.interestRate) }}
 </template>
 
 <script>
@@ -48,10 +58,14 @@ module.exports = {
 			this.products.filter( product => {
 
 				// decide if this should be included in the list
+				console.log( product.firstTimeBuyer, this.values.isFirstTimeBuyer );
+				if( product.firstTimeBuyer !== this.values.isFirstTimeBuyer ){
+					return false;
+				}
 				return true;
 
 			}).map( product => {
-				product.loanAmount = this.getLoanAmount( product.interestRate );
+
 				return product;
 			});
 			return this.products;
@@ -85,5 +99,70 @@ module.exports = {
 </script>
 
 <style lang="scss" scoped>
+.mmp-calculator {
 
+	&__results {
+		text-align: left;
+
+		ul {
+			text-align: left;
+			margin: 0;
+			padding: 0;
+			li {
+				padding: 10px;
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				text-align: left;
+				border: 1px solid #ccc;
+				box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+				h4 {
+					width: auto;
+					padding: 0 20px;
+					font-size: 18px;
+				}
+				p {
+					width: auto !important;
+					padding: 0 20px !important;
+					font-size: 13px;
+				}
+				+ li {
+					margin-top: 20px;
+				}
+			}
+		}
+	}
+
+	&__results-types {
+		text-align: left;
+		font-size: 14px;
+		width: 100%;
+		border-collapse: collapse;
+		th {
+			text-align: left;
+		}
+		thead {
+			background: #f2f2f2;
+		}
+		tbody {
+			tr {
+				border-bottom: 1px solid #f6f6f6;
+				&:last-child {
+					border-bottom-width: 0;
+				}
+				&:nth-child(even){
+					background: #f8f8f8;
+				}
+			}
+		}
+		td,th {
+			text-align: left;
+			padding: 2px 20px;
+			&.t-right{
+				text-align: right;
+			}
+		}
+	}
+
+}
 </style>

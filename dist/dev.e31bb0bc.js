@@ -8900,8 +8900,7 @@ module.exports = {
             attrs: { type: "text" },
             domProps: { value: _vm.values.householdIncome },
             on: {
-              change: _vm.formatNumber,
-              keyup: _vm.formatNumber,
+              blur: _vm.formatNumber,
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -9019,10 +9018,20 @@ module.exports = {
                 }
               }
             },
-            _vm._l(_vm.counties, function(county) {
-              return _c("option", [_vm._v(_vm._s(county))])
-            }),
-            0
+            [
+              _c(
+                "option",
+                {
+                  attrs: { value: "", disabled: "disabled", hidden: "hidden" }
+                },
+                [_vm._v("Select County")]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.counties, function(county) {
+                return _c("option", [_vm._v(_vm._s(county))])
+              })
+            ],
+            2
           )
         ]),
         _vm._v(" "),
@@ -9087,11 +9096,11 @@ module.exports = {
                   expression: "values.isFirstTimeBuyer"
                 }
               ],
-              attrs: { type: "radio", name: "isFirstTimeBuyer", value: "0" },
-              domProps: { checked: _vm._q(_vm.values.isFirstTimeBuyer, "0") },
+              attrs: { type: "radio", name: "isFirstTimeBuyer", value: "N" },
+              domProps: { checked: _vm._q(_vm.values.isFirstTimeBuyer, "N") },
               on: {
                 change: function($event) {
-                  return _vm.$set(_vm.values, "isFirstTimeBuyer", "0")
+                  return _vm.$set(_vm.values, "isFirstTimeBuyer", "N")
                 }
               }
             }),
@@ -9108,11 +9117,11 @@ module.exports = {
                   expression: "values.isFirstTimeBuyer"
                 }
               ],
-              attrs: { type: "radio", name: "isFirstTimeBuyer", value: "1" },
-              domProps: { checked: _vm._q(_vm.values.isFirstTimeBuyer, "1") },
+              attrs: { type: "radio", name: "isFirstTimeBuyer", value: "Y" },
+              domProps: { checked: _vm._q(_vm.values.isFirstTimeBuyer, "Y") },
               on: {
                 change: function($event) {
-                  return _vm.$set(_vm.values, "isFirstTimeBuyer", "1")
+                  return _vm.$set(_vm.values, "isFirstTimeBuyer", "Y")
                 }
               }
             }),
@@ -10970,6 +10979,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 function num(v) {
   if (typeof v === 'string') {
     v = v.replace(/[^\d\.]/g, '');
@@ -10998,9 +11017,14 @@ module.exports = {
 
       this.products.filter(function (product) {
         // decide if this should be included in the list
+        console.log(product.firstTimeBuyer, _this.values.isFirstTimeBuyer);
+
+        if (product.firstTimeBuyer !== _this.values.isFirstTimeBuyer) {
+          return false;
+        }
+
         return true;
       }).map(function (product) {
-        product.loanAmount = _this.getLoanAmount(product.interestRate);
         return product;
       });
       return this.products;
@@ -11045,18 +11069,35 @@ module.exports = {
   return _c("div", { staticClass: "mmp-calculator__results" }, [
     _c(
       "ul",
+      { staticClass: "mmp-calculator__results-products" },
       _vm._l(_vm.recommendedProducts, function(product) {
         return _c("li", [
-          _c("h4", [
-            _vm._v(_vm._s(product.name) + " (" + _vm._s(product.type) + ")")
-          ]),
+          _c("h4", [_vm._v(_vm._s(product.name))]),
           _vm._v(" "),
-          _c("div", { staticClass: "rate" }, [
-            _vm._v(_vm._s(product.interestRate))
-          ]),
+          _c("p", [_vm._v(_vm._s(product.description))]),
           _vm._v(" "),
-          _c("div", { staticClass: "loanAmount" }, [
-            _vm._v(_vm._s(product.loanAmount))
+          _c("table", { staticClass: "mmp-calculator__results-types" }, [
+            _vm._m(0, true),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(product.types, function(type) {
+                return _c("tr", [
+                  _c("td", { staticClass: "type" }, [
+                    _vm._v(_vm._s(type.type))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "rate t-right" }, [
+                    _vm._v(_vm._s(type.interestRate))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "loanAmount t-right" }, [
+                    _vm._v("$" + _vm._s(_vm.getLoanAmount(type.interestRate)))
+                  ])
+                ])
+              }),
+              0
+            )
           ])
         ])
       }),
@@ -11064,7 +11105,22 @@ module.exports = {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th"),
+        _vm._v(" "),
+        _c("th", { staticClass: "t-right" }, [_vm._v("Interest rate")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "t-right" }, [_vm._v("Maximum Loan")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
           return {
@@ -11254,7 +11310,7 @@ module.exports = {
         borrowerIncome: '60,000',
         householdIncome: '100,000',
         householdSize: "1",
-        isFirstTimeBuyer: 0,
+        isFirstTimeBuyer: 'N',
         hasRealEstateAgent: 0,
         isVeteran: 0,
         targeted: 0,
@@ -11296,6 +11352,7 @@ module.exports = {
             if (data.name && data.name !== '' && (!last || last.name !== data.name)) {
               last = new _Product.default(data.name);
               last.description = data.description;
+              last.firstTimeBuyer = data.firstTimeBuyer;
 
               _this.products.push(last);
             }
@@ -11369,7 +11426,7 @@ module.exports = {
     _c("div", { staticClass: "row-fluid" }, [
       _c(
         "div",
-        { staticClass: "col span6" },
+        { staticClass: "col span6 sticky" },
         [_c("calculator-form", { ref: "form", attrs: { values: _vm.values } })],
         1
       ),
@@ -11484,7 +11541,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56531" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52696" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
