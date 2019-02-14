@@ -11201,90 +11201,84 @@ module.exports = {
     };
   },
   created: function created() {
-    this.loadProducts();
-    this.loadLimits();
+    var _this = this;
+
+    // lets get the google sheet
+    var apiKey = this.googleApiKey;
+    var sheetId = this.googleSheetId;
+    var url = "https://sheets.googleapis.com/v4/spreadsheets/".concat(sheetId, "/values:batchGet?ranges=Products&ranges=Limits&ranges=Settings&key=").concat(apiKey);
+
+    _axios.default.get(url).then(function (response) {
+      _this.parseProducts(response.data.valueRanges[0]);
+
+      _this.parseLimits(response.data.valueRanges[1]);
+    }).catch(function (error) {
+      console.log(error);
+    }); // this.loadProducts();
+    // this.loadLimits();
+
   },
   methods: {
-    loadProducts: function loadProducts() {
-      var _this = this;
-
-      // lets get the google sheet
-      var apiKey = this.googleApiKey;
-      var sheetId = this.googleSheetId;
-      var url = "https://sheets.googleapis.com/v4/spreadsheets/".concat(sheetId, "/values/Calculator?key=").concat(apiKey); // reset the products array
-
-      this.products = []; // get the products
-
-      _axios.default.get(url).then(function (response) {
-        var keys = false;
-        var last = null;
-        response.data.values.forEach(function (row) {
-          if (!keys) {
-            keys = row;
-          } else {
-            var data = {};
-            keys.forEach(function (k, i) {
-              data[k] = row[i];
-            });
-
-            if (data.name && data.name !== '' && (!last || last.name !== data.name)) {
-              last = new _Product.default(data.name);
-              last.description = data.description;
-              last.firstTimeBuyer = data.firstTimeBuyer;
-
-              _this.products.push(last);
-            }
-
-            if (last) {
-              last.addType({
-                type: data.type,
-                interestRate: data.interestRate
-              });
-            }
-          }
-        });
-      }).catch(function (error) {
-        console.log(error);
-      });
-    },
-    loadLimits: function loadLimits() {
+    parseProducts: function parseProducts(rangeData) {
       var _this2 = this;
 
-      // lets get the google sheet
-      var apiKey = this.googleApiKey;
-      var sheetId = this.googleSheetId;
-      var url = "https://sheets.googleapis.com/v4/spreadsheets/".concat(sheetId, "/values/Limits?key=").concat(apiKey); // reset the products array
+      var keys = null;
+      var last = null;
+      this.products = [];
+      rangeData.values.forEach(function (row) {
+        if (!keys) {
+          keys = row;
+        } else {
+          var data = {};
+          keys.forEach(function (k, i) {
+            data[k] = row[i];
+          });
 
-      this.limits = []; // get the products
+          if (data.name && data.name !== '' && (!last || last.name !== data.name)) {
+            last = new _Product.default(data.name);
+            last.description = data.description;
+            last.firstTimeBuyer = data.firstTimeBuyer;
 
-      _axios.default.get(url).then(function (response) {
-        var keys = false;
-        var last = null;
-        response.data.values.forEach(function (row) {
-          if (!keys) {
-            keys = row;
-          } else {
-            var data = {};
-            keys.forEach(function (k, i) {
-              data[k] = row[i];
-            });
-
-            if (data.county && data.county !== '' && (!last || last.county !== data.county)) {
-              last = new _CountyLimit.default(data.county);
-              last.note = data.note;
-
-              _this2.limits.push(last);
-            }
-
-            if (last) {
-              last.addHousehold(data.householdSize, data);
-            }
+            _this2.products.push(last);
           }
-        });
-        window.limits = _this2.limits;
-      }).catch(function (error) {
-        console.log(error);
+
+          if (last) {
+            last.addType({
+              type: data.type,
+              interestRate: data.interestRate
+            });
+          }
+        }
       });
+    },
+    loadLimits: function loadLimits(rangeData) {
+      var _this3 = this;
+
+      var keys = null;
+      var last = null;
+      this.limits = [];
+      rangeData.values.forEach(function (row) {
+        if (!keys) {
+          keys = row;
+        } else {
+          var data = {};
+          keys.forEach(function (k, i) {
+            data[k] = row[i];
+          });
+
+          if (data.county && data.county !== '' && (!last || last.county !== data.county)) {
+            last = new _CountyLimit.default(data.county);
+            last.note = data.note;
+
+            _this3.limits.push(last);
+          }
+
+          if (last) {
+            last.addHousehold(data.householdSize, data);
+          }
+        }
+      });
+      window.limits = this.limits;
     }
   }
 };
@@ -11419,7 +11413,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49311" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53532" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

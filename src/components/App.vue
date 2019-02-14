@@ -58,92 +58,90 @@ module.exports = {
 	},
 
 	created : function(){
-		this.loadProducts();
-		this.loadLimits();
+
+		// lets get the google sheet
+		let apiKey = this.googleApiKey;
+		let sheetId = this.googleSheetId;
+		let url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?ranges=Products&ranges=Limits&ranges=Settings&key=${apiKey}`;
+
+		axios.get(url).then( response => {
+
+			this.parseProducts( response.data.valueRanges[0] );
+			this.parseLimits( response.data.valueRanges[1] );
+
+		}).catch( error => {
+
+			console.log( error );
+
+		});
+
+		// this.loadProducts();
+		// this.loadLimits();
 	},
 
 	methods : {
-		loadProducts: function(){
-			// lets get the google sheet
-			let apiKey = this.googleApiKey;
-			let sheetId = this.googleSheetId;
-			let url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Calculator?key=${apiKey}`;
+		parseProducts: function( rangeData ){
 
-			// reset the products array
+			let keys = null;
+			let last = null;
 			this.products = [];
 
-			// get the products
-			axios.get(url).then( response => {
-				let keys = false;
-				let last = null;
-				response.data.values.forEach( row => {
-					if( !keys ){
-						keys = row;
+			rangeData.values.forEach( row => {
+				if( !keys ){
+					keys = row;
+				}
+				else{
+					let data = {};
+					keys.forEach( (k, i) => {
+						data[k] = row[i];
+					});
+					if( data.name && data.name !== '' && (!last || last.name !== data.name ) ){
+						last = new Product( data.name );
+						last.description = data.description;
+						last.firstTimeBuyer = data.firstTimeBuyer;
+						this.products.push( last );
 					}
-					else{
-						let data = {};
-						keys.forEach( (k, i) => {
-							data[k] = row[i];
+					if( last ){
+						last.addType({
+							type: data.type,
+							interestRate: data.interestRate
 						});
-						if( data.name && data.name !== '' && (!last || last.name !== data.name ) ){
-							last = new Product( data.name );
-							last.description = data.description;
-							last.firstTimeBuyer = data.firstTimeBuyer;
-							this.products.push( last );
-						}
-						if( last ){
-							last.addType({
-								type: data.type,
-								interestRate: data.interestRate
-							});
-						}
 					}
-				});
-
-			}).catch( error => {
-				console.log( error );
+				}
 			});
 		},
 
-		loadLimits: function(){
-			// lets get the google sheet
-			let apiKey = this.googleApiKey;
-			let sheetId = this.googleSheetId;
-			let url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Limits?key=${apiKey}`;
+		loadLimits: function( rangeData ){
 
-			// reset the products array
+			let keys = null;
+			let last = null;
 			this.limits = [];
 
-			// get the products
-			axios.get(url).then( response => {
-				let keys = false;
-				let last = null;
-				response.data.values.forEach( row => {
-					if( !keys ){
-						keys = row;
+			rangeData.values.forEach( row => {
+				if( !keys ){
+					keys = row;
+				}
+				else{
+					let data = {};
+					keys.forEach( (k, i) => {
+						data[k] = row[i];
+					});
+					if( data.county && data.county !== '' && (!last || last.county !== data.county ) ){
+						last = new CountyLimit( data.county );
+						last.note = data.note;
+						this.limits.push( last );
 					}
-					else{
-						let data = {};
-						keys.forEach( (k, i) => {
-							data[k] = row[i];
-						});
-						if( data.county && data.county !== '' && (!last || last.county !== data.county ) ){
-							last = new CountyLimit( data.county );
-							last.note = data.note;
-							this.limits.push( last );
-						}
-						if( last ){
-							last.addHousehold(
-								data.householdSize,
-								data
-							);
-						}
+					if( last ){
+						last.addHousehold(
+							data.householdSize,
+							data
+						);
 					}
-				});
-				window.limits = this.limits;
-			}).catch( error => {
-				console.log( error );
+				}
 			});
+
+			window.limits = this.limits;
+
 		}
 	}
 
