@@ -9,8 +9,8 @@ To install this code, you must have the `dist/index.css` and `dist/index.js` hos
 
 jsDelivr is a free CDN service that can use Github repositories as the source, so we will be using this repository with these jsDelivr urls:
 
-https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.2/dist/index.css
-https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.2/dist/index.js
+https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.4/dist/index.css
+https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.4/dist/index.js
 
 ## Google Sheet
 
@@ -30,6 +30,6 @@ You should be able to copy and paste the following code into the HTML of any pag
 	data-google-api-key="AIzaSyDu6xnGN_mGTV5idEi92pGstYH8aOgGJwc"
 	data-google-sheet-id="1bR0zYtpYTWF6xLgt9ZnxBw5sXw1Z8TzjNmaFkjbbXrU"
 ></div>
-<link href="https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.3/dist/index.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.3/dist/index.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.4/dist/index.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.1.4/dist/index.js"></script>
 ```
