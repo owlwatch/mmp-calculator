@@ -4,6 +4,8 @@
   "description": "Maryland Mortgage Program Calculator",
   "main": "index.js",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "@vue/component-compiler-utils": "^2.5.2",
     "parcel-bundler": "^1.11.0",
     "pug": "^2.0.3",

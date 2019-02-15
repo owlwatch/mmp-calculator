@@ -4,18 +4,18 @@
 		.col.span6.sticky
 			calculator-form(
 				ref="form",
-				v-bind:values="values",
-				v-bind:settings="settings",
-				v-bind:limits="limits",
-				v-bind:counties="counties"
+				:values="values",
+				:settings="settings",
+				:limits="limits",
+				:counties="counties"
 			)
 		.col.span6
 			results(
 				ref="results",
-				v-bind:values="values",
-				v-bind:products="products",
-				v-bind:limits="limits",
-				v-bind:settings="settings",
+				:values="values",
+				:products="products",
+				:limits="limits",
+				:settings="settings",
 			)
 </template>
 
@@ -165,15 +165,21 @@ module.exports = {
 
 <style lang="scss" scoped>
 .mmp-calculator {
-    margin: 20px auto;
-    width: 80%;
-    p {
-        width: auto !important;
-        padding-left: 0 !important;
-    }
+  margin: 20px auto;
+  width: 80%;
+	line-height: 1.5;
+  p {
+    width: auto !important;
+    padding-left: 0 !important;
+  }
+	.col {
+		margin-bottom: 2em;
+	}
+	@min-width( 768px ){
 		.sticky {
 			position: sticky;
 			top: 10px;
 		}
+	}
 }
 </style>

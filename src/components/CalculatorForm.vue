@@ -56,6 +56,8 @@ form.mmp-calculator__form
 					option(value="",disabled,hidden) Select County
 					option(v-for="county in counties") {{ county }}
 
+			p.-limits-footnote(v-if="displayTargeting",v-html="targetingFootnote")
+
 			.input-wrap.-radios.-fit(v-if="displayTargeting")
 				label
 					input(type="radio",name="targeted",value="Y",v-model="values.targeted")
@@ -128,6 +130,12 @@ module.exports = {
 		displayTargeting : function(){
 			let limit = this.limits.find( limit => limit.county === this.values.location );
 			return limit && limit.note == "2";
+		},
+		targetingFootnote : function(){
+			if( this.displayTargeting && this.settings ){
+				return this.settings["Limits Footnote 2"];
+			}
+			return false;
 		}
 	},
 
@@ -240,6 +248,12 @@ module.exports = {
 .input-number {
 	width: 7em;
 	text-align: left;
+}
+
+.-limits-footnote {
+	font-size: 12px;
+	padding-left: 0 !important;
+	width: auto !important;
 }
 
 </style>
