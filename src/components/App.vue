@@ -163,6 +163,7 @@ module.exports = {
 
 <style lang="scss" scoped>
 .mmp-calculator {
+	text-align: left;
 	margin: 20px auto;
 	width: 80%;
 	line-height: 1.5;

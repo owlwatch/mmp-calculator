@@ -1,22 +1,31 @@
-import {num} from "../helpers/functions";
+import {
+	num,
+	addCommas
+} from "../helpers/functions";
 
 class HouseholdLimit {
 	constructor( values ){
 		this.values = values;
 	}
 
-	getIncomeLimit( targeted ){
-		return num(targeted ? (this.values.incomeTargeted || this.values.incomeNonTargeted) :
+	getIncomeLimit( targeted, commas ){
+		let v = num(targeted ? (this.values.incomeTargeted || this.values.incomeNonTargeted) :
 			(this.values.incomeNonTargeted || this.values.incomeTargeted));
+
+		return commas ? addCommas( v ) : v;
 	}
 
-	getAcquisition( targeted ){
-		return num(targeted ? (this.values.acquisitionTargeted || this.values.acquisitionNonTargeted ) :
+	getAcquisition( targeted, commas ){
+
+		let v = num(targeted ? (this.values.acquisitionTargeted || this.values.acquisitionNonTargeted ) :
 			(this.values.acquisitionNonTargeted || this.values.acquisitionTargeted));
+
+		return commas ? addCommas( v ) : v;
 	}
 
-	getMaxMortgageAmount(){
-		return num(this.values.maxMortgageAmount);
+	getMaxMortgageAmount( commas ){
+		let v = num(this.values.maxMortgageAmount);
+		return commas ? addCommas( v ) : v;
 	}
 }
 

@@ -8,7 +8,7 @@ form.mmp-calculator__form
 				span.input-context $
 				input.input-number(
 					type="text",
-					v-model.lazy="values.purchasePrice"
+					v-model="values.purchasePrice"
 					@blur="formatNumber"
 				)
 
@@ -19,7 +19,7 @@ form.mmp-calculator__form
 				span.input-context $
 				input.input-number(
 					type="text",
-					v-model.lazy="values.downPayment"
+					v-model="values.downPayment"
 					@blur="formatNumber"
 				)
 
@@ -30,7 +30,7 @@ form.mmp-calculator__form
 				span.input-context $
 				input.input-number(
 					type="text",
-					v-model.lazy="values.householdIncome"
+					v-model="values.householdIncome"
 					@blur="formatNumber"
 				)
 
@@ -56,8 +56,6 @@ form.mmp-calculator__form
 					option(value="",disabled,hidden) Select County
 					option(v-for="county in counties") {{ county }}
 
-			p.-limits-footnote(v-if="displayTargeting",v-html="targetingFootnote")
-
 			.input-wrap.-radios.-fit(v-if="displayTargeting")
 				label
 					input(type="radio",name="targeted",value="Y",v-model="values.targeted")
@@ -65,6 +63,8 @@ form.mmp-calculator__form
 				label
 					input(type="radio",name="targeted",value="N",v-model="values.targeted")
 					span Non-Targeted
+
+			p.-limits-footnote(v-if="targetingFootnote",v-html="targetingFootnote")
 
 
 	.mmp-calculator__form-group
@@ -132,8 +132,12 @@ module.exports = {
 			return limit && limit.note == "2";
 		},
 		targetingFootnote : function(){
-			if( this.displayTargeting && this.settings ){
+			let limit = this.limits.find( limit => limit.county === this.values.location );
+			if( limit && limit.note === "2" && this.settings ){
 				return this.settings["Limits Footnote 2"];
+			}
+			if( limit && limit.note == "1" && this.settings ){
+				return this.settings["Limits Footnote 1"];
 			}
 			return false;
 		}
@@ -161,6 +165,7 @@ module.exports = {
 		> span {
 			display: block;
 			font-weight: bold;
+			margin-bottom: 0.4em;
 		}
 		> input, > .input-wrap {
 			margin-top: 0.5em;
@@ -217,6 +222,7 @@ module.exports = {
 	> select {
 		display: block;
 		border: 1px solid #ccc;
+		font-size: 15px;
 
 	}
 	&.-radios {
@@ -252,6 +258,7 @@ module.exports = {
 
 .-limits-footnote {
 	font-size: 12px;
+	font-weight: 400;
 	padding-left: 0 !important;
 	width: auto !important;
 }
