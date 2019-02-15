@@ -63,22 +63,22 @@ module.exports = {
 		};
 	},
 
-	created : function(){
+	created: function() {
 
 		// lets get the google sheet
 		let apiKey = this.googleApiKey;
 		let sheetId = this.googleSheetId;
 		let url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?ranges=Products&ranges=Limits&ranges=Settings&key=${apiKey}`;
 
-		axios.get(url).then( response => {
+		axios.get(url).then(response => {
 
-			this.parseProducts( response.data.valueRanges[0] );
-			this.parseLimits( response.data.valueRanges[1] );
-			this.parseSettings( response.data.valueRanges[2] );
+			this.parseProducts(response.data.valueRanges[0]);
+			this.parseLimits(response.data.valueRanges[1]);
+			this.parseSettings(response.data.valueRanges[2]);
 
-		}).catch( error => {
+		}).catch(error => {
 
-			console.log( error );
+			console.log(error);
 
 		});
 
@@ -86,29 +86,28 @@ module.exports = {
 		// this.loadLimits();
 	},
 
-	methods : {
-		parseProducts: function( rangeData ){
+	methods: {
+		parseProducts: function(rangeData) {
 
 			let keys = null;
 			let last = null;
 			this.products = [];
 
-			rangeData.values.forEach( row => {
-				if( !keys ){
+			rangeData.values.forEach(row => {
+				if (!keys) {
 					keys = row;
-				}
-				else{
+				} else {
 					let data = {};
-					keys.forEach( (k, i) => {
+					keys.forEach((k, i) => {
 						data[k] = row[i];
 					});
-					if( data.name && data.name !== '' && (!last || last.name !== data.name ) ){
-						last = new Product( data.name );
+					if (data.name && data.name !== '' && (!last || last.name !== data.name)) {
+						last = new Product(data.name);
 						last.description = data.description;
 						last.firstTimeBuyer = data.firstTimeBuyer;
-						this.products.push( last );
+						this.products.push(last);
 					}
-					if( last ){
+					if (last) {
 						last.addType({
 							type: data.type,
 							interestRate: data.interestRate
@@ -118,29 +117,28 @@ module.exports = {
 			});
 		},
 
-		parseLimits: function( rangeData ){
+		parseLimits: function(rangeData) {
 
 			let keys = null;
 			let last = null;
 			this.limits = [];
 			this.counties = [];
 
-			rangeData.values.forEach( row => {
-				if( !keys ){
+			rangeData.values.forEach(row => {
+				if (!keys) {
 					keys = row;
-				}
-				else{
+				} else {
 					let data = {};
-					keys.forEach( (k, i) => {
+					keys.forEach((k, i) => {
 						data[k] = row[i];
 					});
-					if( data.county && data.county !== '' && (!last || last.county !== data.county ) ){
-						last = new CountyLimit( data.county );
+					if (data.county && data.county !== '' && (!last || last.county !== data.county)) {
+						last = new CountyLimit(data.county);
 						last.note = data.note;
-						this.limits.push( last );
-						this.counties.push( data.county );
+						this.limits.push(last);
+						this.counties.push(data.county);
 					}
-					if( last ){
+					if (last) {
 						last.addHousehold(
 							data.householdSize,
 							data
@@ -150,10 +148,10 @@ module.exports = {
 			});
 		},
 
-		parseSettings: function( rangeData ){
+		parseSettings: function(rangeData) {
 			this.settings = {};
 			rangeData.values.forEach(row => {
-				if( row.length > 1 ){
+				if (row.length > 1) {
 					this.settings[row[0]] = row[1];
 				}
 			});
@@ -165,17 +163,17 @@ module.exports = {
 
 <style lang="scss" scoped>
 .mmp-calculator {
-  margin: 20px auto;
-  width: 80%;
+	margin: 20px auto;
+	width: 80%;
 	line-height: 1.5;
-  p {
-    width: auto !important;
-    padding-left: 0 !important;
-  }
+	p {
+		width: auto !important;
+		padding-left: 0 !important;
+	}
 	.col {
 		margin-bottom: 2em;
 	}
-	@min-width( 768px ){
+	@min-width(768px) {
 		.sticky {
 			position: sticky;
 			top: 10px;
