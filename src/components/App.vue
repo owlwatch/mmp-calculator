@@ -173,7 +173,7 @@ module.exports = {
 	.col {
 		margin-bottom: 2em;
 	}
-	@min-width(768px) {
+	@media( min-width: 768px ){
 		.sticky {
 			position: sticky;
 			top: 10px;
