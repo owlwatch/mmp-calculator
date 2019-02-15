@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "autoprefixer": "^9.4.7",
     "axios": "^0.18.0",
     "postcss-modules": "^1.4.1",
