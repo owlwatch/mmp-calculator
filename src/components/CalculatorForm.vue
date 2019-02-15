@@ -3,14 +3,37 @@ form.mmp-calculator__form
 
 	.mmp-calculator__form-group
 		label.mmp-calculator__form-label
+			span What is the purchase price of the property?
+			.input-wrap.-bordered
+				span.input-context $
+				input.input-number(
+					type="text",
+					v-model.lazy="values.purchasePrice"
+					@blur="formatNumber"
+				)
+
+	.mmp-calculator__form-group
+		label.mmp-calculator__form-label
+			span What is your down payment amount?
+			.input-wrap.-bordered
+				span.input-context $
+				input.input-number(
+					type="text",
+					v-model.lazy="values.downPayment"
+					@blur="formatNumber"
+				)
+
+	.mmp-calculator__form-group
+		label.mmp-calculator__form-label
 			span Total Household Income
 			.input-wrap.-bordered
 				span.input-context $
 				input.input-number(
 					type="text",
-					v-model="values.householdIncome"
+					v-model.lazy="values.householdIncome"
 					@blur="formatNumber"
 				)
+
 	.mmp-calculator__form-group
 		label.mmp-calculator__form-label
 			span Household Size
@@ -33,12 +56,12 @@ form.mmp-calculator__form
 					option(value="",disabled,hidden) Select County
 					option(v-for="county in counties") {{ county }}
 
-			.input-wrap.-radios.-fit
+			.input-wrap.-radios.-fit(v-if="displayTargeting")
 				label
-					input(type="radio",name="targeted",value="1",v-model="values.targeted")
+					input(type="radio",name="targeted",value="Y",v-model="values.targeted")
 					span Targeted
 				label
-					input(type="radio",name="targeted",value="0",v-model="values.targeted")
+					input(type="radio",name="targeted",value="N",v-model="values.targeted")
 					span Non-Targeted
 
 
@@ -55,13 +78,24 @@ form.mmp-calculator__form
 
 	.mmp-calculator__form-group
 		.mmp-calculator__form-label
+			span Do you have student debt?
+			.input-wrap.-radios.-fit
+				label
+					input(type="radio",name="studentDebt",value="N",v-model="values.hasStudentDebt")
+					span No
+				label
+					input(type="radio",name="studentDebt",value="Y",v-model="values.hasStudentDebt")
+					span Yes
+
+	.mmp-calculator__form-group
+		.mmp-calculator__form-label
 			span Is this home going to be your primary residence?
 			.input-wrap.-radios.-fit
 				label
-					input(type="radio",name="isPrimaryResidence",value="0",v-model="values.isPrimaryResidence")
+					input(type="radio",name="isPrimaryResidence",value="N",v-model="values.isPrimaryResidence")
 					span No
 				label
-					input(type="radio",name="isPrimaryResidence",value="1",v-model="values.isPrimaryResidence")
+					input(type="radio",name="isPrimaryResidence",value="Y",v-model="values.isPrimaryResidence")
 					span Yes
 
 	//.mmp-calculator__form-actions
@@ -71,41 +105,35 @@ form.mmp-calculator__form
 
 <script>
 
-const counties = ["Allegany","Anne Arundel","Baltimore","Baltimore City","Calvert","Caroline","Carroll","Cecil","Charles","Dorchester","Frederick","Garrett","Harford","Howard","Kent","Montgomery","Prince George's","Queen Anne's","St. Mary's","Somerset","Talbot","Washington","Wicomico","Worcester"];
+import {addCommas} from "../helpers/functions";
 
 module.exports = {
 	props: [
-		"values"
+		"values",
+		"settings",
+		"limits"
 	],
 	data: function() {
 		return {
-			counties: counties
+
 		};
 	},
 	computed : {
 		json: function(){
 			return JSON.stringify( this.$data );
+		},
+		counties : function(){
+			return this.limits.map( limit => limit.county );
+		},
+		displayTargeting : function(){
+			let limit = this.limits.find( limit => limit.county === this.values.location );
+			return limit && limit.note == "2";
 		}
-	},
-
-	watch : {
-		values: function(){
-			// we should emit a change event
-			this.emitUpdate();
-		}
-	},
-
-	created : function(){
-		this.emitUpdate();
 	},
 
 	methods : {
-		emitUpdate : function(){
-			this.$emit( 'change' );
-		},
-
 		formatNumber : function( e ){
-			e.target.value = e.target.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+			e.target.value = addCommas( e.target.value );
 		}
 	}
 };

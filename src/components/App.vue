@@ -4,15 +4,18 @@
 		.col.span6.sticky
 			calculator-form(
 				ref="form",
-				v-bind:values="values"
+				v-bind:values="values",
+				v-bind:settings="settings",
+				v-bind:limits="limits",
+				v-bind:counties="counties"
 			)
 		.col.span6
 			results(
 				ref="results",
-				v-bind:products="products",
 				v-bind:values="values",
-				v-bind:googleApiKey="googleApiKey",
-				v-bind:googleSheetId="googleSheetId"
+				v-bind:products="products",
+				v-bind:limits="limits",
+				v-bind:settings="settings",
 			)
 </template>
 
@@ -41,19 +44,22 @@ module.exports = {
 		return {
 			name: "MMP Mortgage Calculator",
 			values: {
-				borrowerIncome: '60,000',
-				householdIncome: '100,000',
+				householdIncome: "100,000",
 				householdSize: "1",
-				isFirstTimeBuyer: 'N',
-				hasRealEstateAgent: 0,
-				isVeteran: 0,
-				targeted: 0,
+				purchasePrice: "300,000",
+				downPayment: "60,000",
+				isFirstTimeBuyer: "Y",
+				isVeteran: "N",
+				hasStudentDebt: "N",
+				targeted: "N",
 				term: 30,
-				isPrimaryResidence: 0,
-				location: ''
+				isPrimaryResidence: "Y",
+				location: ""
 			},
 			products: [],
-			counties: []
+			settings: {},
+			counties: [],
+			limits: []
 		};
 	},
 
@@ -68,6 +74,7 @@ module.exports = {
 
 			this.parseProducts( response.data.valueRanges[0] );
 			this.parseLimits( response.data.valueRanges[1] );
+			this.parseSettings( response.data.valueRanges[2] );
 
 		}).catch( error => {
 
@@ -111,11 +118,12 @@ module.exports = {
 			});
 		},
 
-		loadLimits: function( rangeData ){
+		parseLimits: function( rangeData ){
 
 			let keys = null;
 			let last = null;
 			this.limits = [];
+			this.counties = [];
 
 			rangeData.values.forEach( row => {
 				if( !keys ){
@@ -130,6 +138,7 @@ module.exports = {
 						last = new CountyLimit( data.county );
 						last.note = data.note;
 						this.limits.push( last );
+						this.counties.push( data.county );
 					}
 					if( last ){
 						last.addHousehold(
@@ -139,9 +148,15 @@ module.exports = {
 					}
 				}
 			});
+		},
 
-			window.limits = this.limits;
-
+		parseSettings: function( rangeData ){
+			this.settings = {};
+			rangeData.values.forEach(row => {
+				if( row.length > 1 ){
+					this.settings[row[0]] = row[1];
+				}
+			});
 		}
 	}
 

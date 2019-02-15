@@ -11,8 +11,8 @@
     "vue-template-compiler": "^2.6.3"
   },
   "scripts": {
-    "serve": "parcel serve index.html",
-    "build": "parcel build index.js"
+    "serve": "parcel serve index.html -d dev-build",
+    "build": "parcel build index.js -d dist"
   },
   "author": "",
   "license": "ISC",

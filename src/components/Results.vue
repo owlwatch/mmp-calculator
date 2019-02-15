@@ -1,50 +1,56 @@
 <template lang="pug">
 .mmp-calculator__results
-	h2 Available Products
-	ul.mmp-calculator__results-products
-		li(v-for="product in recommendedProducts")
-			h4 {{ product.name }}
-			p {{ product.description }}
-			table.mmp-calculator__results-types
-				thead
-					tr
-						th
-						th.t-right Interest rate
-						th.t-right Maximum Loan
-				tbody
-					tr(v-for="type in product.types")
-						td.type {{ type.type }}
-						td.rate.t-right {{ type.interestRate }}
-						td.loanAmount.t-right ${{ getLoanAmount( type.interestRate) }}
+	template(v-if="hasEnoughInformation")
+		h2 Eligibility
+			.mmp-calculator__results-eligible(v-if="isEligible")
+				.mmp-calculator__results-message.-eligible
+					p You are eligible for Maryland Mortgage Program products.
+
+			.mmp-calculator__results-ineligible(v-else)
+				.mmp-calculator__results-message.-ineligible
+				p Unfortunately, you do not qualify for the any products in the Maryland Mortgage Program.
+
+				ul.errors
+					li(v-for="reason in ineligibleReasons")
+						p {{ reason }}
+
+		template(v-if="isEligible")
+			h2 Available Products
+			ul.mmp-calculator__results-products
+				li(v-for="product in recommendedProducts")
+					h4 {{ product.name }}
+					p {{ product.description }}
+					table.mmp-calculator__results-types
+						thead
+							tr
+								th
+								th.t-right Interest rate
+								th.t-right Monthly Payment
+						tbody
+							tr(v-for="type in product.types")
+								td.type {{ type.type }}
+								td.rate.t-right {{ type.interestRate }}
+								td.loanAmount.t-right ${{ getMonthlyPayment( type.interestRate ) }}
+	template(v-else)
+		p Please complete the form to see what products you are eligible for.
 </template>
 
 <script>
 
 import axios from "axios";
-
-function num( v ){
-	if( typeof v === 'string' ){
-		v = v.replace(/[^\d\.]/g, '');
-	}
-	return Number.parseFloat( v );
-}
-
-function round( v, places ){
-	var exp = Math.pow(10, places);
-	return Math.round( v * exp ) / exp;
-}
-
-function addCommas( num ){
-	return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-}
+import {
+	num,
+	round,
+	addCommas
+} from "../helpers/functions";
 
 module.exports = {
 
 	props: [
-		'values',
-		'googleSheetId',
-		'googleApiKey',
-		'products'
+		"values",
+		"products",
+		"limits",
+		"settings"
 	],
 
 	data: function() {
@@ -54,12 +60,13 @@ module.exports = {
 	},
 
 	computed : {
+
 		recommendedProducts : function(){
 
 			return this.products.filter( product => {
 
 				// decide if this should be included in the list
-				if( product.firstTimeBuyer === 'Y' && this.values.isFirstTimeBuyer === 'N'){
+				if( product.firstTimeBuyer === "Y" && this.values.isFirstTimeBuyer === "N"){
 					return false;
 				}
 				return true;
@@ -67,21 +74,62 @@ module.exports = {
 			}).map( product => {
 
 				return product;
+			}).sort( (a,b) => {
+				let aMin = false;
+				let bMin = false;
+				a.types.forEach( type => {
+					let i = num( type.interestRate );
+					return aMin = aMin === false ? i : Math.min( 	i, aMin );
+				});
+
+				b.types.forEach( type => {
+					let i = num( type.interestRate );
+					return bMin = bMin === false ? i : Math.min( i, bMin );
+				});
+				return aMin-bMin;
+
 			});
 		},
 
-		monthlyPayment: function(){
-			if( !this.values.householdIncome ){
-				return false;
+		countyLimit : function(){
+
+			return this.limits.find( limit => {
+				return limit.county === this.values.location;
+			});
+		},
+
+		ineligibleReasons : function(){
+
+			let reasons = [];
+
+			if( !this.hasEnoughInformation || !this.limits ) return reasons;
+
+			let householdLimit = this.countyLimit.getHousehold( this.values.householdSize );
+			let incomeLimit = householdLimit.getIncomeLimit( this.values.targeted==="Y" );
+			if( num(this.values.householdIncome) > incomeLimit ){
+				reasons.push( `Your household income exceeds the maximum allowed income for this county of $${addCommas( incomeLimit )}` );
 			}
-			let income = num(this.values.householdIncome);
-			let monthlyIncome = income / 12;
 
-			// the recommended amount
-			let payment = monthlyIncome * 0.28;
-			return round(payment,2);
+			let maxMortgage = householdLimit.getMaxMortgageAmount();
+			if( num(this.values.purchasePrice)-num(this.values.downPayment) > maxMortgage ){
+				reasons.push( `The load amount exceeds the maximum allowed income for this county of $${addCommas( maxMortgage )}` );
+			}
 
-		}
+			return reasons;
+
+		},
+
+		isEligible : function(){
+			return this.ineligibleReasons.length === 0;
+		},
+
+		hasEnoughInformation : function(){
+			return this.values.purchasePrice &&
+				this.values.downPayment &&
+				this.values.householdIncome &&
+				this.values.householdSize &&
+				this.values.location;
+		},
 	},
 
 	methods : {
@@ -91,6 +139,29 @@ module.exports = {
 			var power = 1.0;
 			for (var i=0; ++i<=( this.values.term * 12 ); power *= (1+rate) ) ;
 			return addCommas(Math.round( this.monthlyPayment / (rate/(1-(1/power))) ));
+		},
+
+		getMonthlyPayment: function( interestRate ){
+
+			let principal = num(this.values.purchasePrice) - num(this.values.downPayment);
+			let interest = num( interestRate ) / 100 / 12;
+			let payments = num(this.values.term) * 12;
+
+			let x = Math.pow( 1 + interest, payments );
+			let monthly = ( principal * x * interest ) / ( x - 1 );
+
+			if (!isNaN(monthly) &&  (monthly != Number.POSITIVE_INFINITY) && (monthly != Number.NEGATIVE_INFINITY)) {
+				// if we want to know the total paid
+				let total = round(monthly * payments);
+				let totalInterest = round((monthly * payments) - principal);
+
+				return round(monthly);
+			}
+
+			else {
+				return '?';
+			}
+
 		}
 
 	}
@@ -110,7 +181,17 @@ module.exports = {
 			margin-bottom: 1em;
 		}
 
-		ul {
+		p {
+			width: auto !important;
+			padding-left: 0 !important;
+			font-size: 15px;
+		}
+
+		&-ineligible {
+
+		}
+
+		&-products {
 			text-align: left;
 			margin: 0;
 			padding: 0;
@@ -133,7 +214,7 @@ module.exports = {
 					font-size: 13px;
 				}
 				+ li {
-					margin-top: 20px;
+					margin-top: 40px;
 				}
 			}
 		}
@@ -143,6 +224,7 @@ module.exports = {
 		text-align: left;
 		font-size: 14px;
 		width: 100%;
+		border-top: 1px solid #d8d8d8;
 		border-collapse: collapse;
 		th {
 			text-align: left;

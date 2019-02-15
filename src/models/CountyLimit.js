@@ -1,21 +1,22 @@
+import {num} from "../helpers/functions";
+
 class HouseholdLimit {
 	constructor( values ){
 		this.values = values;
 	}
 
 	getIncomeLimit( targeted ){
-		return targeted ? this.values.incomeTargeted : 
-			(this.values.incomeNonTargeted || this.values.incomeTargeted);
+		return num(targeted ? (this.values.incomeTargeted || this.values.incomeNonTargeted) :
+			(this.values.incomeNonTargeted || this.values.incomeTargeted));
 	}
 
 	getAcquisition( targeted ){
-		console.log( targeted );
-		return targeted ? this.values.acquisitionTargeted :
-			(this.values.acquisitionNonTargeted || this.values.acquisitionTargeted);
+		return num(targeted ? (this.values.acquisitionTargeted || this.values.acquisitionNonTargeted ) :
+			(this.values.acquisitionNonTargeted || this.values.acquisitionTargeted));
 	}
 
 	getMaxMortgageAmount(){
-		return this.values.maxMortgageAmount;
+		return num(this.values.maxMortgageAmount);
 	}
 }
 
@@ -34,7 +35,6 @@ export default class CountyLimit {
 
 	addHousehold( household, values ){
 		let householdLimit = new HouseholdLimit( values );
-		console.log( householdLimit );
 		this.households[household] = householdLimit;
 	}
 }
