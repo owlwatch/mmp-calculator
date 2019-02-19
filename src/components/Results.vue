@@ -1,25 +1,24 @@
 <template lang="pug">
 .mmp-calculator__results
 	template(v-if="hasEnoughInformation")
-		h2 Eligibility
+		h2 {{ settings["Eligibility Heading"] }}
 
 		.mmp-calculator__results-eligible(v-if="isEligible")
 			.mmp-calculator__results-message.-eligible
 				p.mmp-calculator__message
-					|  Congratulations! You are eligible for Maryland Mortgage Program products. For your
+					|  {{ settings["Eligible Message"] }} For your
 					|  household size, #[strong {{ values.location }}] has a
 					|  limit of #[strong ${{ householdLimit.getIncomeLimit( values.targeted, true ) }}]
 					|  and a loan limit of #[strong ${{ householdLimit.getMaxMortgageAmount( values.targeted, true ) }}].
 
 		.mmp-calculator__results-ineligible(v-else)
 			.mmp-calculator__results-message.-ineligible
-			p Unfortunately, you do not qualify for the any products in the
-				|  Maryland Mortgage Program.
+			p {{ settings["Ineligible Message"] }}
 
 			p.mmp-calculator__message.-error(v-for="reason in ineligibleReasons") {{ reason }}
 
 		template(v-if="isEligible")
-			h2.-sticky Available Products
+			h2.-sticky {{ settings["Products Heading"] }}
 			ul.mmp-calculator__results-products
 				li(v-for="product in recommendedProducts")
 					h4 {{ product.name }}
