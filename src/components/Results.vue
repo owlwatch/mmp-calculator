@@ -38,7 +38,7 @@
 										| ${{ getMonthlyPayment( type.interestRate, true ) }}
 									span(v-else) ${{ getMonthlyPayment( type.interestRate, true ) }}
 	template(v-else)
-		p Please complete the form to see what products you are eligible for.
+		p {{ settings["Empty Form"] }}
 </template>
 
 <script>
