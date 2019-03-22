@@ -22,17 +22,13 @@ class HouseholdLimit {
 
 		return commas ? addCommas( v ) : v;
 	}
-
-	getMaxMortgageAmount( commas ){
-		let v = num(this.values.maxMortgageAmount);
-		return commas ? addCommas( v ) : v;
-	}
 }
 
 export default class CountyLimit {
 	constructor( county ){
 		this.county = county;
 		this.households = {};
+		this.maxMortgage = 0;
 	}
 
 	getHousehold( n ){
@@ -45,5 +41,13 @@ export default class CountyLimit {
 	addHousehold( household, values ){
 		let householdLimit = new HouseholdLimit( values );
 		this.households[household] = householdLimit;
+		if( values.maxMortgageAmount ){
+			this.maxMortgageAmount = values.maxMortgageAmount;
+		}
+	}
+	
+	getMaxMortgageAmount( commas ){
+		let v = num(this.maxMortgageAmount);
+		return commas ? addCommas( v ) : v;
 	}
 }
