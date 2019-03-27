@@ -76,7 +76,7 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 		
 		br
 			
-		.mmp-calculator__share
+		.mmp-calculator__share(v-if="showPrintButton")
 			label
 				span.mmp-calculator__share-label Share your results
 				.mmp-calculator__share-input
@@ -92,7 +92,6 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 						v-clipboard:copy="shareableUrl",
 						v-clipboard:success="handleCopyStatus",
       			v-clipboard:error="handleCopyStatus",
-						v-if="showPrintButton"
 					) 
 						include ../svg/copy-regular.svg
 						div.mmp-calculator__copy-message(
@@ -102,8 +101,7 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 						
 					a.mmp-calculator__share-btn(
 						target="_blank",
-						:href="mailToUrl",
-						v-if="showPrintButton",
+						:href="mailToUrl"
 					) 
 						include ../svg/email.svg
 </template>

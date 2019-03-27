@@ -9,8 +9,8 @@ To install this code, you must have the `dist/index.css` and `dist/index.js` hos
 
 jsDelivr is a free CDN service that can use Github repositories as the source, so we will be using this repository with these jsDelivr urls:
 
-`https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.3.0/dist/index.css`
-`https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.3.0/dist/index.js`
+`https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.3.1/dist/index.css`
+`https://cdn.jsdelivr.net/gh/owlwatch/mmp-calculator@0.3.1/dist/index.js`
 
 ## Google Sheet
 
