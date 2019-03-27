@@ -9,10 +9,10 @@ class Copy {
 		this.strings[key] = value;
 	}
 	
-	get( key, vars, inline ){
+	get( key, vars, inline, allowEmpty ){
 		let str = this.strings[key];
 		if( !str ){
-			return key;
+			return allowEmpty ? '' : key;
 		}
 		return tmpl( str, vars, inline );
 	}

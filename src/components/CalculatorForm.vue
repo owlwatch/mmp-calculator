@@ -2,7 +2,7 @@
 form.mmp-calculator__form(@submit.prevent="calculate")
 	.mmp-calculator__form-group(v-for="(field, index) in fields")
 		transition(name="forminput")
-			label.mmp-calculator__form-label(v-if="showField(field)",@keydown.tab="onTab",:data-name="field.name")
+			label.mmp-calculator__form-label(:data-name="field.name")
 				div.mmp-calculator__form-label-text
 					span(v-html="field.label")
 					span.tooltip-icon(
@@ -63,13 +63,7 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 					div.-limits-footnote(v-if="targetingFootnote",v-html="targetingFootnote")
 				
 	.mmp-calculator__form-actions
-		div.mmp-calculator__form-progress(
-			v-if="!showCalculateButton"
-			v-html="progressText"
-		)
-			
 		button.mmp-calculator__button(
-			v-if="showCalculateButton",
 			type="submit",
 			:disabled="calculateButtonDisabled"
 		) {{ calculateButtonText }}
@@ -79,6 +73,39 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 			type="button",
 			@click="print"
 		) {{ printButtonText }}
+		
+		br
+			
+		.mmp-calculator__share
+			label
+				span.mmp-calculator__share-label Share your results
+				.mmp-calculator__share-input
+					input(
+						type="text",
+						:value="shareableUrl",
+						readonly
+					)
+					a.mmp-calculator__share-btn(
+						target="_blank",
+						:href="shareableUrl",
+						@click="preventDefault",
+						v-clipboard:copy="shareableUrl",
+						v-clipboard:success="handleCopyStatus",
+      			v-clipboard:error="handleCopyStatus",
+						v-if="showPrintButton"
+					) 
+						include ../svg/copy-regular.svg
+						div.mmp-calculator__copy-message(
+							v-html="copyMessage",
+							:class="{'animated fadeInUp': !!copyMessage}"
+						)
+						
+					a.mmp-calculator__share-btn(
+						target="_blank",
+						:href="mailToUrl",
+						v-if="showPrintButton",
+					) 
+						include ../svg/email.svg
 </template>
 
 <script>
@@ -93,15 +120,6 @@ module.exports = {
 		MaskedInput
 	},
 	
-	directives: {
-	  focus: {
-	    // directive definition
-	    inserted: function (el) {
-	      el.focus()
-	    }
-	  }
-	},
-	
 	props: [
 		"values",
 		"settings",
@@ -111,12 +129,13 @@ module.exports = {
 	
 	data: function() {
 		return {
-			formdata:{}
+			formdata:{},
+			copyMessage: ""
 		};
 	},
 	
 	created : function(){
-		
+		this.formdata = Object.assign({}, this.values.data);
 	},
 	
 	computed : {
@@ -125,6 +144,9 @@ module.exports = {
 		},
 		counties : function(){
 			return this.limits.map( limit => limit.county );
+		},
+		locationLimit : function(){
+			return this.limits.find( limit => limit.county === this.formdata.location );
 		},
 		displayTargeting : function(){
 			let limit = this.limits.find( limit => limit.county === this.formdata.location );
@@ -165,12 +187,18 @@ module.exports = {
 	    	copy.get("Calculate",{},true);
 		},
 		calculateButtonDisabled : function(){
-			for( let name in this.formdata ){
-				if( this.formdata[name] !== this.values.data[name]){
-					return false;
+			
+			for( let field of this.fields ){
+				if( this.formdata[field.name] === undefined ){
+					return true;
+				}
+				else if( field.name == 'location' && 
+				         this.locationLimit.note === '2' &&
+							   this.formdata.targeted === undefined ){
+					return true;
 				}
 			}
-			return true;
+			return false;
 		},
 		printButtonText : function(){
 			return copy.get("Print",{},true);
@@ -186,6 +214,28 @@ module.exports = {
 				}
 			}
 			return 'Question '+count+' of '+this.fields.length;
+		},
+		
+		shareableUrl : function(){
+			let url = location.protocol+'//'+location.hostname+(location.port?":"+location.port:"")+location.pathname+(location.search?location.search:"");
+			url+='#'+(btoa(JSON.stringify(this.values.data)));
+			return url;
+		},
+		
+		mailToUrl : function(){
+			let subject = encodeURIComponent(copy.get("Email Subject",{},true));
+			let url = encodeURIComponent(this.shareableUrl);
+			return `mailto:?to=&subject=${subject}&body=${this.shareableUrl}`;
+		}
+	},
+	
+	watch : {
+		values : function(newVal, oldVal) {
+			for( let i in newVal ){
+				this.formdata[i] = newVal[i];
+			}
+			this.$forceUpdate();
+			this.calculate();
 		}
 	},
 
@@ -292,6 +342,29 @@ module.exports = {
 		print : function(){
 			
 			window.print();
+		},
+		
+		setData : function( data ){
+			this.formdata = data;
+			if( !this.nextButtonDisabled ){
+				this.calculate();
+			}
+		},
+		
+		preventDefault : function(e){
+			e.preventDefault();
+		},
+		
+		handleCopyStatus : function(success){
+			clearTimeout( this.copyMessageTimeout );
+			this.copyMessage = success ? 
+				'The link has been copied!' :
+				'Press Ctrl+C to copy the link';
+				
+			this.timeout = setTimeout(()=>{
+				this.copyMessage = '';
+			}, 3000);
+			
 		}
 	}
 };
@@ -299,9 +372,20 @@ module.exports = {
 
 <style lang="scss">
 .mmp-calculator__form {
+	@media print {
+		display: flex;
+		flex-wrap: wrap;
+	}
 	&-group {
+		@media print {
+			width: 50%;
+			margin-bottom: 2rem;
+		}
 		+ .mmp-calculator__form-group {
 			margin-top: 1.5em;
+			@media print {
+				margin-top: 0;
+			}
 		}
 	}
 	&-label {
@@ -340,6 +424,9 @@ module.exports = {
 	&-actions {
 		margin-top: 10px;
 		padding-top: 10px;
+		@media print {
+			display: none;
+		}
 	}
 }
 
@@ -362,6 +449,66 @@ module.exports = {
 		cursor: default;
 		background: rgba(#ffc20d, 40% );
 		color: #999;
+	}
+}
+.mmp-calculator__copy-message {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-bottom: 10px;
+	background: rgba(0,0,0,0.9);
+	color: #fff;
+	pointer-events: none;
+	font-size: 12px;
+	white-space: nowrap;
+	padding: 2px 10px;
+	line-height: 1.5;
+	display: none;
+	z-index: 2;
+}
+.mmp-calculator__share {
+	display: block;
+	margin-top: 20px;
+	&-label {
+		font-weight: bold;
+		display: block;
+		margin-bottom: 5px;
+	}
+	&-input {
+		display: flex;
+		width: 100%;
+		> a,button {
+			
+		}
+		input {
+			height: 2.5em;
+			padding: 0 6px;
+			flex: 1;
+			border-radius: 0;
+			box-sizing: border-box;
+		}
+	}
+	&-btn {
+		position: relative;
+		color: #08c;
+		display: inline-block;
+		height: 2.5em;
+		line-height: 2.5em;
+		vertical-align: middle;
+		text-align: center;
+		width: 2.5em;
+		padding: 0;
+		background: #f2f2f2;
+		border: 1px solid #d8d8d8;
+		box-sizing: border-box;
+		margin-left: -1px;
+	}
+	svg {
+		display: inline-block;
+		vertical-align: text-bottom;
+		height: 1.2em;
+		width: auto;
 	}
 }
 
@@ -466,5 +613,46 @@ module.exports = {
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+
+
+@keyframes fadeInUp {
+    from {
+        transform: translate3d(-50%,15px,0)
+    }
+
+    to {
+        transform: translate3d(-50%,0,0);
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes fadeInUp {
+    from {
+        transform: translate3d(-50%,10px,0);
+    }
+
+    to {
+        transform: translate3d(-50%,0,0);
+        opacity: 1;
+    }
+}
+
+.animated {
+	display: block;
+    animation-duration: 0.2s;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 0.2s;
+    -webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+    opacity: 0
+}
+
+.fadeInUp {
+    opacity: 0;
+    animation-name: fadeInUp;
+    -webkit-animation-name: fadeInUp;
 }
 </style>

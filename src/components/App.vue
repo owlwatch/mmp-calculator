@@ -36,10 +36,12 @@ import axios from "axios";
 import copy from "../helpers/copy";
 import {tmpl} from "../helpers/functions";
 
-import VTooltip from 'v-tooltip'
+import VTooltip from 'v-tooltip';
+import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue';
 
 Vue.use(VTooltip);
+Vue.use(VueClipboard);
 
 module.exports = {
 
@@ -95,6 +97,19 @@ module.exports = {
 		// this.loadProducts();
 		// this.loadLimits();
 	},
+	
+	mounted : function(){
+		// do we have data from the url?
+		if( window.location.hash ){
+			try {
+				let json = JSON.parse(atob(window.location.hash.replace(/^#/, '')));
+				this.values.data = json;
+			}
+			catch(e){
+				// not for us
+			}
+		}
+	},
 
 	methods: {
 		parseProducts: function(rangeData) {
@@ -115,6 +130,7 @@ module.exports = {
 						last = new Product(data.name);
 						last.description = data.description;
 						last.firstTimeBuyer = data.firstTimeBuyer;
+						last.studentDebtProduct = data.studentDebtProduct;
 						this.products.push(last);
 					}
 					if (last) {
@@ -203,7 +219,6 @@ module.exports = {
 			if( !this.$el ){
 				return;
 			}
-			console.log( this.$refs );
 			window.scrollTo( 0, this.$refs.results.$el.offsetTop - 20 );
 		}
 	}

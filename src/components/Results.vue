@@ -62,7 +62,7 @@
 						
 						
 	template(v-else)
-		p {{ settings["Empty Form"] }}
+		div.mmp-calculator__empty-text(v-html="emptyText")
 </template>
 
 <script>
@@ -130,6 +130,11 @@ module.exports = {
 				});
 				return aMin-bMin;
 
+			}).sort( (a, b) => {
+				if( a.studentDebtProduct == 'Y' && this.vals.hasStudentDebt == 'Y' ){
+					return b.studentDebtProduct == 'Y' ? 0 : -1;
+				}
+				return 1;
 			});
 		},
 		
@@ -161,6 +166,10 @@ module.exports = {
 					downpayment_amount: '$'+addCommas( this.vals.downPayment ),
 					purchase_price: '$'+addCommas( this.vals.purchasePrice )
 				}));
+			}
+			
+			if( this.vals.isPrimaryResidence == "N" ){
+				reasons.push( copy.get( 'Error: Primary Residence',{}) );
 			}
 
 			let householdLimit = this.countyLimit.getHousehold( this.vals.householdSize );
@@ -197,7 +206,7 @@ module.exports = {
 		},
 
 		hasEnoughInformation : function(){
-			return this.vals.purchasePrice &&
+			return this.vals && this.vals.purchasePrice &&
 				this.vals.downPayment &&
 				this.vals.householdIncome &&
 				this.vals.householdSize &&
@@ -246,14 +255,18 @@ module.exports = {
 			return copy.get("Interest Rate", {}, true)
 		},
 		interestRateTooltip : function(){
-			return copy.get("Interest Rate Tooltip", {}, true);
+			return copy.get("Interest Rate Tooltip", {}, true, true);
 		},
 		
 		monthlyPaymentText : function(){
 			return copy.get("Monthly Payment", {}, true);
 		},
 		monthlyPaymentTooltip : function(){
-			return copy.get("Monthly Payment Tooltip", {}, true);
+			return copy.get("Monthly Payment Tooltip", {}, true, true);
+		},
+		
+		emptyText : function(){
+			return copy.get("Empty Form", {}, false, true);
 		}
 	},
 
@@ -342,7 +355,7 @@ module.exports = {
 
 	&__message {
 		padding: 0px !important;
-		margin: 10px 0;
+		margin: 20px 0;
 		+ & {
 			margin-top: 10px;
 		}
@@ -356,9 +369,24 @@ module.exports = {
 	strong {
 		font-weight: bold !important;
 	}
+	
+	&__empty-text {
+		background: #f2f2f2;
+		padding: 20px;
+		border: 1px solid #d8d8d8;
+	}
 
 	&__results {
 		text-align: left;
+		
+		* {
+			&:first-child {
+				margin-top: 0 !important;
+			}
+			&:last-child {
+				margin-bottom: 0 !important;
+			}
+		}
 
 		h2 {
 			width: auto;
@@ -399,6 +427,10 @@ module.exports = {
 					padding: 0 20px;
 					margin-bottom: 0.75em;
 					font-size: 18px;
+					&:first-child {
+						margin-top: 10px !important;
+						margin-bottom: 10px !important;
+					}
 				}
 				p {
 					width: auto !important;
