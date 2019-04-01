@@ -2,6 +2,10 @@ import "@babel/polyfill";
 import Vue from 'vue';
 import App from './src/components/App.vue';
 
+if (window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+}
+
 function init(){
 	let nodes = document.querySelectorAll('[data-component="mmp-mortgage-calculator"]');
 	nodes.forEach( node => {
