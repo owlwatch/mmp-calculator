@@ -67,7 +67,7 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 			type="submit",
 			:disabled="calculateButtonDisabled"
 		) {{ calculateButtonText }}
-		|  
+		| &nbsp;
 		button.mmp-calculator__button(
 			v-if="showPrintButton",
 			type="button",
