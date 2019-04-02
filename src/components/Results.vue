@@ -409,10 +409,6 @@ module.exports = {
 			font-size: 15px;
 		}
 
-		&-ineligible {
-
-		}
-
 		&-products {
 			text-align: left;
 			margin: 0;
