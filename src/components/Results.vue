@@ -111,6 +111,9 @@ module.exports = {
 				if( product.firstTimeBuyer === "Y" && this.vals.isFirstTimeBuyer === "N"){
 					return false;
 				}
+				if( product.studentDebtProduct == "Y" && this.vals.hasStudentDebt === "N" ){
+					return false;
+				}
 				return true;
 
 			}).map( product => {

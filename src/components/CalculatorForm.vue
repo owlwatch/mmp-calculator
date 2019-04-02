@@ -67,7 +67,7 @@ form.mmp-calculator__form(@submit.prevent="calculate")
 			type="submit",
 			:disabled="calculateButtonDisabled"
 		) {{ calculateButtonText }}
-		
+		|  
 		button.mmp-calculator__button(
 			v-if="showPrintButton",
 			type="button",
@@ -439,6 +439,9 @@ module.exports = {
 	display: block;
 	@media( min-width: 500px ){
 		display: inline-block;
+		+ .mmp-calculator__button {
+			margin-left: 6px;
+		}
 	}
 	&:hover {
 		background: rgba( #ffc20d, 85% );
@@ -476,9 +479,6 @@ module.exports = {
 	&-input {
 		display: flex;
 		width: 100%;
-		> a,button {
-			
-		}
 		input {
 			height: 2.5em;
 			padding: 0 6px;
