@@ -16,6 +16,7 @@
 			.col.span6
 				results(
 					ref="results",
+					:fields="fields",
 					:values="values",
 					:products="products",
 					:limits="limits",

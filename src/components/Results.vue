@@ -82,7 +82,8 @@ module.exports = {
 		"values",
 		"products",
 		"limits",
-		"settings"
+		"settings",
+		"fields"
 	],
 
 	data: function() {
@@ -209,11 +210,20 @@ module.exports = {
 		},
 
 		hasEnoughInformation : function(){
-			return this.vals && this.vals.purchasePrice &&
-				this.vals.downPayment &&
-				this.vals.householdIncome &&
-				this.vals.householdSize &&
-				this.vals.location;
+
+			for( let f of this.fields ){
+				if( this.vals[f.name] === undefined ){
+					return false;
+				}
+				if( f.name !== 'location' ){
+					continue;
+				}
+				let limit = this.limits.find( limit => limit.county === this.vals.location );
+				if( limit && limit.note === "2" && this.vals.targeted === undefined ){
+					return false;
+				}
+			}
+			return true;
 		},
 		
 		eligibleHeading : function(){
