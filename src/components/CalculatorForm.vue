@@ -162,7 +162,7 @@ module.exports = {
 		},
 		showCalculateButton : function(){
 			for( let f of this.fields ){
-				if( !this.formdata[f.name] ){
+				if( this.formdata[f.name] === undefined ){
 					return false;
 				}
 			}
@@ -173,16 +173,16 @@ module.exports = {
 		},
 		hasCalculated : function(){
 			for(var key in this.values.data) {
-        if(this.values.data.hasOwnProperty(key)){
-          return true;
+				if(this.values.data.hasOwnProperty(key)){
+					return true;
 				}
-	    }
+			}
 			return false;
 		},
 		calculateButtonText : function(){
 			return this.hasCalculated ? 
 				copy.get("Recalculate",{},true) :
-	    	copy.get("Calculate",{},true);
+	    		copy.get("Calculate",{},true);
 		},
 		calculateButtonDisabled : function(){
 			
