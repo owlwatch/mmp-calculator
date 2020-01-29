@@ -1,6 +1,6 @@
 {
   "name": "mortgage-calculator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Maryland Mortgage Program Calculator",
   "main": "index.js",
   "devDependencies": {
@@ -13,7 +13,7 @@
     "vue-template-compiler": "^2.6.3"
   },
   "scripts": {
-    "serve": "parcel serve index.html -d dev-build",
+    "serve": "parcel serve index.html -d dev-build",  
     "build": "parcel build index.js -d dist"
   },
   "author": "",
