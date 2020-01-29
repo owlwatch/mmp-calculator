@@ -190,9 +190,10 @@ module.exports = {
 
 			let maxMortgage = this.countyLimit.getMaxMortgageAmount();
 			if( num(this.vals.purchasePrice)-num(this.vals.downPayment) > maxMortgage ){
+				console.log( this.vals, maxMortgage );
 				reasons.push( copy.get( 'Loan Amount Exceeded', {
 					loan_amount: '$'+addCommas(num(this.vals.purchasePrice)-num(this.vals.downPayment)),
-					maximum_load_amount: '$'+addCommas( maxMortgage ),
+					maximum_loan_amount: '$'+addCommas( maxMortgage ),
 					downpayment_amount: '$'+addCommas( this.vals.downPayment ),
 					purchase_price: '$'+addCommas( this.vals.purchasePrice ),
 					household_income: '$'+addCommas( this.vals.householdIncome ),
