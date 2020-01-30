@@ -299,7 +299,7 @@ module.exports = {
       border-right-color: transparent !important;
       border-bottom-color: transparent !important;
       bottom: -5px;
-      left: calc(50% - 5px);
+      left: 1%;
       margin-top: 0;
       margin-bottom: 0;
     }

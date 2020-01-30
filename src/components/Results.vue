@@ -232,7 +232,7 @@ module.exports = {
 		},
 		
 		eligibleHeadingTooltip : function(){
-			return copy.get('Eligible Heading Tooltip', {}, true);
+			return copy.get('Eligible Heading Tooltip', {}, true, true);
 		},
 		
 		productsHeading : function(){
@@ -240,7 +240,7 @@ module.exports = {
 		},
 		
 		productsHeadingTooltip : function(){
-			return copy.get('Products Heading Tooltip', {}, true);
+			return copy.get('Products Heading Tooltip', {}, true, true);
 		},
 		
 		eligibleMessage : function(){
